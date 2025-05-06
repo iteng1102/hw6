@@ -95,5 +95,32 @@ bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>
 								   std::string word, std::set<std::string>& result, unsigned int r, unsigned int c, int dr, int dc)
 {
 //add your solution here!
+	if (r >= board.size() || c>= board.size()){ //base case 
+		if (dict.find(word)!= dict.end()){ //if the word  exists in dictionary add to result 
+			//std::cout << "insert word into dictionary" <<std::endl;
+			result.insert(word);
+			return true; 
+		}
+		return false; //else return false 
+	}
+ 
+  std::string current = word + board[r][c]; //add a new letter to the word 
+	//std:: cout << "current word " << current << std::endl;
 
+  if (prefix.find(current)== prefix.end()){ //check if the new word is a predix
+		//std:: cout << "prefix not found" << std::endl;
+		if (dict.find(current)!=dict.end()){ //if not prefix but in dictionary insert it too and return true 
+			//std::cout << "insert pre" << current << std::endl;
+			result.insert(current);
+			return true; 
+		}
+    return false; //else return false 
+  }
+	bool status = boggleHelper(dict, prefix, board, current, result, r + dr, c +dc, dr, dc); //recurse with the new word 
+	//word.pop_back();
+	if (!status && dict.find(current)!=dict.end()){ //if recurse = false but in dictionary, add it in and return true 
+		result.insert(current);
+		return true; 
+	}
+	return status; //return the status in the end 
 }
